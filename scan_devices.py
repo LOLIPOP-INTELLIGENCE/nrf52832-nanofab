@@ -37,15 +37,19 @@ async def scan_and_connect():
             # Define the characteristic UUID
             CHAR_UUID = "a38a803f-f6b3-420b-a95a-10cc7b32b6db"
             
-            # Read the string
-            value = await client.read_gatt_char(CHAR_UUID)
-            string_value = value.decode('utf-8')
-            logger.info(f"Received string: {string_value}")
+            # String to send
+            message = "Hello from Python!"
             
-            # Keep connection alive
-            logger.info("Press Ctrl+C to disconnect...")
+            # Write the string
+            await client.write_gatt_char(CHAR_UUID, message.encode('utf-8'))
+            logger.info(f"Sent message: {message}")
+            
+            # Keep sending messages every 5 seconds
             while True:
-                await asyncio.sleep(1)
+                message = f"Time is {asyncio.get_event_loop().time():.2f}"
+                await client.write_gatt_char(CHAR_UUID, message.encode('utf-8'))
+                logger.info(f"Sent message: {message}")
+                await asyncio.sleep(5)
                 
     except Exception as e:
         logger.error(f"Error: {str(e)}")

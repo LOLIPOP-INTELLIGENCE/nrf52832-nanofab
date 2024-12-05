@@ -40,6 +40,27 @@ static struct bt_uuid_128 custom_characteristic_uuid = BT_UUID_INIT_128(CUSTOM_C
 static char string_buffer[] = "Hello from Nordic!";
 static uint16_t string_length = sizeof(string_buffer);
 
+static uint8_t received_string[64] = {0}; // Buffer to store received data
+static uint16_t received_length = 0;
+
+// New write callback function
+static ssize_t write_string(struct bt_conn *conn, const struct bt_gatt_attr *attr,
+                           const void *buf, uint16_t len, uint16_t offset,
+                           uint8_t flags)
+{
+    if (offset + len > sizeof(received_string)) {
+        return BT_GATT_ERR(BT_ATT_ERR_INVALID_OFFSET);
+    }
+
+    memcpy(received_string + offset, buf, len);
+    received_length = offset + len;
+    
+    // Print the received string
+    printk("Received: %.*s\n", received_length, received_string);
+    
+    return len;
+}
+
 // Characteristic read callback
 static ssize_t read_string(struct bt_conn *conn, const struct bt_gatt_attr *attr,
                           void *buf, uint16_t len, uint16_t offset)
@@ -52,9 +73,9 @@ static ssize_t read_string(struct bt_conn *conn, const struct bt_gatt_attr *attr
 BT_GATT_SERVICE_DEFINE(custom_svc,
     BT_GATT_PRIMARY_SERVICE(&custom_service_uuid),
     BT_GATT_CHARACTERISTIC(&custom_characteristic_uuid.uuid,
-                          BT_GATT_CHRC_READ,
-                          BT_GATT_PERM_READ,
-                          read_string, NULL, NULL),
+                          BT_GATT_CHRC_WRITE,  // Changed from READ to WRITE
+                          BT_GATT_PERM_WRITE,  // Changed from READ to WRITE permission
+                          NULL, write_string, NULL),
 );
 
 static void connected(struct bt_conn *conn, uint8_t err)

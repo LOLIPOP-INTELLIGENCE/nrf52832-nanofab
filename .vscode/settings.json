@@ -2,5 +2,8 @@
     "nrf-connect.applications": [
         "${workspaceFolder}/Program1",
         "${workspaceFolder}/event_trigger"
-    ]
+    ],
+    "files.associations": {
+        "conn.h": "c"
+    }
 }
