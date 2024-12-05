@@ -6,7 +6,7 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# The UUID we're looking for (from your C code)
+# The UUID we're looking for
 TARGET_UUID = "038a803f-f6b3-420b-a95a-10cc7b32b6db"
 
 async def scan_and_connect():
@@ -37,19 +37,19 @@ async def scan_and_connect():
             # Define the characteristic UUID
             CHAR_UUID = "a38a803f-f6b3-420b-a95a-10cc7b32b6db"
             
-            # String to send
-            message = "Hello from Python!"
-            
-            # Write the string
-            await client.write_gatt_char(CHAR_UUID, message.encode('utf-8'))
-            logger.info(f"Sent message: {message}")
-            
-            # Keep sending messages every 5 seconds
             while True:
-                message = f"Time is {asyncio.get_event_loop().time():.2f}"
-                await client.write_gatt_char(CHAR_UUID, message.encode('utf-8'))
-                logger.info(f"Sent message: {message}")
-                await asyncio.sleep(5)
+                # Get user input
+                command = input("Enter 1 to turn LED ON, 0 to turn LED OFF (q to quit): ")
+                
+                if command.lower() == 'q':
+                    break
+                    
+                if command in ['0', '1']:
+                    # Send the command
+                    await client.write_gatt_char(CHAR_UUID, command.encode('utf-8'))
+                    logger.info(f"Sent command: {'ON' if command == '1' else 'OFF'}")
+                else:
+                    logger.warning("Invalid command! Use 0 or 1")
                 
     except Exception as e:
         logger.error(f"Error: {str(e)}")
