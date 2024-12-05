@@ -1,5 +1,6 @@
 {
     "nrf-connect.applications": [
-        "${workspaceFolder}/Program1"
+        "${workspaceFolder}/Program1",
+        "${workspaceFolder}/event_trigger"
     ]
 }
