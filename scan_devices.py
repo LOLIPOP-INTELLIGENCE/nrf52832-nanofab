@@ -31,17 +31,16 @@ async def scan_and_connect():
     logger.info(f"Found target device: {target_device.name} ({target_device.address})")
     
     try:
-        # Connect to the device
         async with BleakClient(target_device.address) as client:
             logger.info(f"Connected: {client.is_connected}")
             
-            # Get device information
-            logger.info("Device services:")
-            for service in client.services:
-                logger.info(f"Service: {service.uuid}")
-                for char in service.characteristics:
-                    logger.info(f"  Characteristic: {char.uuid}")
-                    logger.info(f"    Properties: {char.properties}")
+            # Define the characteristic UUID
+            CHAR_UUID = "a38a803f-f6b3-420b-a95a-10cc7b32b6db"
+            
+            # Read the string
+            value = await client.read_gatt_char(CHAR_UUID)
+            string_value = value.decode('utf-8')
+            logger.info(f"Received string: {string_value}")
             
             # Keep connection alive
             logger.info("Press Ctrl+C to disconnect...")
