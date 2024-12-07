@@ -1,7 +1,9 @@
 {
     "nrf-connect.applications": [
         "${workspaceFolder}/Program1",
-        "${workspaceFolder}/event_trigger"
+        "${workspaceFolder}/event_trigger",
+        "${workspaceFolder}/I2C",
+        "${workspaceFolder}/target_eeprom"
     ],
     "files.associations": {
         "conn.h": "c"
