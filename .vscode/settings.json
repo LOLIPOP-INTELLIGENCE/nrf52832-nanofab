@@ -3,7 +3,8 @@
         "${workspaceFolder}/Program1",
         "${workspaceFolder}/event_trigger",
         "${workspaceFolder}/I2C",
-        "${workspaceFolder}/target_eeprom"
+        "${workspaceFolder}/target_eeprom",
+        "${workspaceFolder}/I2C_MAX30205"
     ],
     "files.associations": {
         "conn.h": "c",
