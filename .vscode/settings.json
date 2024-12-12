@@ -6,6 +6,7 @@
         "${workspaceFolder}/target_eeprom"
     ],
     "files.associations": {
-        "conn.h": "c"
+        "conn.h": "c",
+        "i2c.h": "c"
     }
 }
